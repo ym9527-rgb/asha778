@@ -1,4 +1,5 @@
-// _worker.js — 内部改写：无 .html → landing-a；有 .html → landing-b；首页 "/" 不改写
+// functions/[[path]].js — Pages Functions 版本
+// 内部改写：无 .html → landing-a；有 .html → landing-b；首页 "/" 不改写
 // 随机注入：%%TAGLINE%% / %%HERO%% / %%HERO_SRC%%；支持 ?canon= 注入 canonical
 // 从 canonical 提取 {tl} 注入 %%TITLE%% / %%DESCRIPTION%%（标题仅用 {tl}）
 // 标题支持随机 Emoji（🏆 等）；此版已内置 40 枚“标题安全”表情
@@ -18,27 +19,25 @@ const EMOJIS = [
   '📈','🏁','🏟️','🏏','⚽','🏀','🎯','🎟️','🧧','🎁'
 ];
 
-// KV 图
 const HERO_SOURCES = ['/assets/1.png','/assets/2.png','/assets/3.png','/assets/4.png'];
 const HERO_SNIPPETS = HERO_SOURCES.map(src =>
   `<amp-img src="${src}" width="1200" height="600" layout="responsive" alt="asha778 Hero"></amp-img>`
 );
 
-// 可选：正文随机标语（与 <title> 无关）
 const TAGLINES = [
   "১০০% ওয়েলকাম বোনাস — সর্বোচ্চ ৳৫০,000",
-  "২০০% নিউ প্লেয়ার প্যাক — সর্বোচ্চ ৳৫,000",
+  "২০০% নিউ প্লেয়ার প্যাক — সর্বোচ্চ ৳৫,০০০",
   "৳৫০০ ডিপোজিট করুন, অতিরিক্ত ৳৫০০ পান (নতুন ব্যবহারকারীদের জন্য)",
-  "দৈনিক ১০% ক্যাশব্যাক — সর্বোচ্চ ৳৩,000",
+  "দৈনিক ১০% ক্যাশব্যাক — সর্বোচ্চ ৳৩,০০০",
   "স্পিন & উইন: ৳১,০০০+ এ ২৫ ফ্রি স্পিন",
   "UPI • Nagad • bKash — ইনস্ট্যান্ট ডিপোজিট",
   "৩০ সেকেন্ডে রেজিস্টার • OTP লগইন • ফাস্ট KYC",
   "মোবাইল-ফার্স্ট • লো ডাটা • বাংলা/ইংরেজি",
   "স্লটস রেসকিউ বোনাস — প্রতিদিন",
-  "স্পোর্টস লাকি স্ট্রিক বোনাস — সর্বোচ্চ ৳২০,000",
+  "স্পোর্টস লাকি স্ট্রিক বোনাস — সর্বোচ্চ ৳২০,০০০",
   "রিয়েল-টাইম রিবেট • দৈনিক ক্যাশব্যাক ২.৮৮%",
   "লাকি স্পিন — ১০০% উইন",
-  "রেফার & আর্ন — সর্বোচ্চ ৳১,০০,000",
+  "রেফার & আর্ন — সর্বোচ্চ ৳১,০০,০০০",
   "নিরাপদ • দায়িত্বশীল গেমিং • শুধুমাত্র ১৮+",
   "ফেস্টিভ্যাল স্পেশাল: সাইনআপে অতিরিক্ত স্পিন",
   "VIP পার্কস • লেভেল-আপ বোনাস",
@@ -63,7 +62,7 @@ const DEFAULT_ORIGIN = 'https://asha778.com';
 const DEFAULT_TITLE = 'asha778 | One of the most popular online casinos in the BANGLADI';
 const DEFAULT_DESCRIPTION = 'ASHA778.COM হল রিয়েল টাইম ডিলারদের সাথে অনলাইনে লাইভ ক্যাসিনো গেম খেলার এবং প্রতিটি বাংলাদেশী খেলোয়াড়ের জন্য ক্রিকেট বেটিং খেলার সবচেয়ে বিশ্বস্ত প্ল্যাটফর্ম"';
 
-// ===== 工具 =====
+// ===== 工具函数 =====
 function wantsHTML(req) {
   const accept = req.headers.get('accept') || '';
   return accept.includes('text/html') || accept.includes('*/*') || accept === '';
@@ -82,16 +81,13 @@ function pickIndex(arrLen, req, urlPath, cookieName) {
   return Math.floor(Math.random() * arrLen);
 }
 function stripTags(s='') { return s.replace(/<\/?[^>]+>/g, ''); }
-function htmlEscape(s='') {
-  return s.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-}
+function htmlEscape(s='') { return s.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
 function sanitizeForTag(s, maxLen, fallback) {
   if (!s) return fallback;
   s = stripTags(String(s)).trim().replace(/\s+/g,' ');
   if (s.length > maxLen) s = s.slice(0, maxLen-1) + '…';
   return s || fallback;
 }
-// 提取 {tl}（Unicode 友好），仅返回 {tl} 的人类化标题
 function extractTL(canonHref) {
   try {
     const u = new URL(canonHref);
@@ -104,13 +100,11 @@ function extractTL(canonHref) {
     return tlName;
   } catch { return null; }
 }
-// 选 Emoji（随机/路径稳定/关闭）
 function pickEmoji(urlPath) {
   if (TITLE_EMOJI_MODE === 'off') return '';
   if (TITLE_EMOJI_MODE === 'sticky_path') return EMOJIS[hash32('t' + urlPath) % EMOJIS.length];
   return EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
 }
-// 前/后位置（路径稳定或随机）
 function decorateTitle(base, urlPath) {
   const e = pickEmoji(urlPath);
   if (!e) return base;
@@ -120,16 +114,15 @@ function decorateTitle(base, urlPath) {
   return front ? `${e} ${base}` : `${base} ${e}`;
 }
 
+// ===== Pages Function 主入口 =====
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
     const method = req.method.toUpperCase();
     if (!['GET','HEAD'].includes(method)) return env.ASSETS.fetch(req);
 
-    // 1) 首页不改写
     if (url.pathname === '/') return env.ASSETS.fetch(req);
 
-    // 2) 放行静态资源与真实 /amp/* 文件
     const isAsset =
       ASSET_EXT.test(url.pathname) ||
       url.pathname.startsWith('/assets/') ||
@@ -141,7 +134,6 @@ export default {
     const isHTMLPath = /\.html?$/i.test(url.pathname);
     const targetPath = isHTMLPath ? TARGET_B : TARGET_A;
 
-    // 3) 读取模板
     let resp = await env.ASSETS.fetch(new Request(new URL(targetPath, url), req));
     if ([301,302,307,308].includes(resp.status)) {
       const loc = resp.headers.get('Location');
@@ -151,11 +143,9 @@ export default {
     let html = await resp.text();
     const headers = new Headers(resp.headers);
 
-    // 4) KV/文案索引
     const heroIdx = pickIndex(HERO_SNIPPETS.length, req, url.pathname, 'hero');
     const tlIdx   = pickIndex(TAGLINES.length, req, url.pathname, 'tg');
 
-    // 5) canonical（优先 ?canon=；否则 DEFAULT_ORIGIN + 同路径）
     let canonical = null;
     const canonQ = url.searchParams.get('canon');
     if (canonQ) {
@@ -170,11 +160,9 @@ export default {
       canonical = DEFAULT_ORIGIN + u2.pathname + (u2.search || '');
     }
 
-    // 6) 生成 Title/Description（带 Emoji）
     const tlName = extractTL(canonical);
     const autoTitleBase = tlName || DEFAULT_TITLE;
-    const autoDescBase  =
-      tlName
+    const autoDescBase  = tlName
         ? `Play ${tlName} with UPI • Paytm • PhonePe. Register in 30s — OTP Login, Fast KYC. 18+ | T&Cs apply.`
         : DEFAULT_DESCRIPTION;
 
@@ -182,7 +170,6 @@ export default {
     const title = sanitizeForTag(decoratedTitle, 70,  DEFAULT_TITLE);
     const descr = sanitizeForTag(autoDescBase,    160, DEFAULT_DESCRIPTION);
 
-    // 7) 替换占位符
     if (html.includes('%%HERO%%'))      html = html.replace('%%HERO%%', HERO_SNIPPETS[heroIdx]);
     if (html.includes('%%HERO_SRC%%'))  html = html.replace(/%%HERO_SRC%%/g, HERO_SOURCES[heroIdx]);
     if (html.includes('%%TAGLINE%%'))   html = html.replace(/%%TAGLINE%%/g, TAGLINES[tlIdx]);
@@ -192,7 +179,6 @@ export default {
     if (html.includes('%%DESCRIPTION%%')) html = html.replace(/%%DESCRIPTION%%/g, htmlEscape(descr));
     if (tlName && html.includes('%%TL%%')) html = html.replace(/%%TL%%/g, htmlEscape(tlName));
 
-    // 8) 缓存
     if (MODE === 'sticky_user') {
       headers.set('Vary', 'Accept, Cookie');
       headers.set('Cache-Control', 'private, max-age=0, no-cache');
@@ -216,9 +202,3 @@ export default {
     return new Response(html, { status: 200, headers });
   }
 };
-
-
-
-
-
-
