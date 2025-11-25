@@ -21,47 +21,47 @@ const EMOJIS = [
 // KV 图
 const HERO_SOURCES = ['/assets/1.png','/assets/2.png','/assets/3.png','/assets/4.png'];
 const HERO_SNIPPETS = HERO_SOURCES.map(src =>
-  `<amp-img src="${src}" width="1200" height="600" layout="responsive" alt="r8r8 Hero"></amp-img>`
+  `<amp-img src="${src}" width="1200" height="600" layout="responsive" alt="asha778 Hero"></amp-img>`
 );
 
 // 可选：正文随机标语（与 <title> 无关）
 const TAGLINES = [
-  "100% Welcome Bonus up to ₹99,999",
-  "200% New Player Pack up to ₹10,000",
-  "Deposit ₹500, Get Extra ₹500 (New users)",
-  "Daily 10% Cashback up to ₹3,000",
-  "Spin & Win: 25 Free Spins on ₹1,000+",
-  "UPI • Paytm • PhonePe — Instant Deposit",
-  "Register in 30s • OTP Login • Fast KYC",
-  "Mobile-first • Low Data • Hindi/English",
-  "Slots Rescue Bonus — Every Day",
-  "Sports Lucky Streak Bonus up to ₹39,999",
-  "Real-time Rebate • Daily Cashback up to 2.88%",
-  "Lucky Spin — 100% Win",
-  "Refer & Earn — Rewards up to ₹599,999",
-  "Secure • Responsible • 18+ Only",
-  "Festival Special: Extra Spins on Signup",
-  "VIP Perks • Level-up Bonus",
-  "Live Dealers • High-Payout Tables",
-  "Mega Sports Week • Bonus On",
-  "Newbie Protection: Loss Cover Bonus",
-  "Fast UPI Bonus: ₹200 on First Deposit",
-  "Weekly Surprise Drops • Don’t Miss Out",
-  "Choose Your Perk: Big Bonus or Cashback",
-  "Teen Patti • Andar Bahar • Slots — All in One",
-  "T&Cs apply • Know your limits",
-  "Welcome Pack for India • Grab it Now",
-  "Top-up Boost Day • Limited Time",
-  "Instant Withdrawals • Trusted & Secure",
-  "Play More, Earn More — Daily Missions",
-  "Exclusive Telegram Offers • Join Now",
-  "Best Odds • Bigger Thrills • r8r8"
+  "১০০% ওয়েলকাম বোনাস — সর্বোচ্চ ৳৫০,000",
+  "২০০% নিউ প্লেয়ার প্যাক — সর্বোচ্চ ৳৫,000",
+  "৳৫০০ ডিপোজিট করুন, অতিরিক্ত ৳৫০০ পান (নতুন ব্যবহারকারীদের জন্য)",
+  "দৈনিক ১০% ক্যাশব্যাক — সর্বোচ্চ ৳৩,000",
+  "স্পিন & উইন: ৳১,০০০+ এ ২৫ ফ্রি স্পিন",
+  "UPI • Nagad • bKash — ইনস্ট্যান্ট ডিপোজিট",
+  "৩০ সেকেন্ডে রেজিস্টার • OTP লগইন • ফাস্ট KYC",
+  "মোবাইল-ফার্স্ট • লো ডাটা • বাংলা/ইংরেজি",
+  "স্লটস রেসকিউ বোনাস — প্রতিদিন",
+  "স্পোর্টস লাকি স্ট্রিক বোনাস — সর্বোচ্চ ৳২০,000",
+  "রিয়েল-টাইম রিবেট • দৈনিক ক্যাশব্যাক ২.৮৮%",
+  "লাকি স্পিন — ১০০% উইন",
+  "রেফার & আর্ন — সর্বোচ্চ ৳১,০০,000",
+  "নিরাপদ • দায়িত্বশীল গেমিং • শুধুমাত্র ১৮+",
+  "ফেস্টিভ্যাল স্পেশাল: সাইনআপে অতিরিক্ত স্পিন",
+  "VIP পার্কস • লেভেল-আপ বোনাস",
+  "লাইভ ডিলার • হাই-পেআউট টেবিলস",
+  "মেগা স্পোর্টস উইক • বোনাস অন",
+  "নিউবি প্রোটেকশন: লস কভার বোনাস",
+  "ফাস্ট UPI বোনাস: প্রথম ডিপোজিটে ৳২০০",
+  "সাপ্তাহিক সারপ্রাইজ ড্রপস • মিস করবেন না",
+  "আপনার পছন্দ: বিগ বোনাস বা ক্যাশব্যাক",
+  "টিন পাত্তি • অন্দর বাহার • স্লটস — সব একসাথে",
+  "T&Cs প্রযোজ্য • নিজের সীমা জানুন",
+  "বাংলাদেশ ওয়েলকাম প্যাক • এখনই নিন",
+  "টপ-আপ বুস্ট ডে • সীমিত সময়",
+  "ইনস্ট্যান্ট উইথড্রয়াল • ট্রাস্টেড & সিকিউর",
+  "বেশি খেলুন, বেশি উপার্জন করুন — ডেইলি মিশনস",
+  "এক্সক্লুসিভ টেলিগ্রাম অফার • এখনই যোগ দিন",
+  "সেরা অডস • বড় উত্তেজনা • asha778",
 ];
 
 const ASSET_EXT = /\.(css|js|mjs|map|png|jpg|jpeg|gif|svg|webp|ico|txt|json|xml|woff2?|ttf|otf|eot|wasm|mp4|mp3|webm|ogg)$/i;
-const DEFAULT_ORIGIN = 'https://r8r899.com';
-const DEFAULT_TITLE = 'r8r8 — India Welcome Offers';
-const DEFAULT_DESCRIPTION = 'UPI • Paytm • PhonePe. Register in 30s. 18+ | Play Responsibly';
+const DEFAULT_ORIGIN = 'https://asha778.com';
+const DEFAULT_TITLE = 'asha778 | One of the most popular online casinos in the BANGLADI';
+const DEFAULT_DESCRIPTION = 'ASHA778.COM হল রিয়েল টাইম ডিলারদের সাথে অনলাইনে লাইভ ক্যাসিনো গেম খেলার এবং প্রতিটি বাংলাদেশী খেলোয়াড়ের জন্য ক্রিকেট বেটিং খেলার সবচেয়ে বিশ্বস্ত প্ল্যাটফর্ম"';
 
 // ===== 工具 =====
 function wantsHTML(req) {
@@ -216,3 +216,7 @@ export default {
     return new Response(html, { status: 200, headers });
   }
 };
+
+
+
+
